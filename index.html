@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>James Harris — Product &amp; Payments</title>
 <meta name="description" content="Product and payments leader — selected working prototypes.">
+<meta property="og:title" content="James Harris — Product & Payments">
+<meta property="og:description" content="Selected working prototypes — not slide decks. Click in, sign in, use them.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jpharris06-dot.github.io">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="James Harris — Product & Payments">
+<meta name="twitter:description" content="Selected working prototypes — not slide decks. Click in, sign in, use them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -137,6 +144,35 @@
     .meta-row span + span::before{ margin:0 9px; }
     .nav .links a{ margin-left:14px; }
   }
+
+  /* ---------- EMAIL MODAL ---------- */
+  .email-modal-overlay{
+    position:fixed; inset:0; z-index:1000; display:none; align-items:center; justify-content:center;
+    background: rgba(6,10,14,0.65); backdrop-filter: blur(3px); padding:20px;
+  }
+  .email-modal-overlay.show{ display:flex; }
+  .email-modal-card{
+    width:320px; max-width:100%; background: var(--panel-2); border:1px solid var(--line);
+    border-radius: var(--radius); overflow:hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .email-modal-head{
+    display:flex; align-items:center; justify-content:space-between; padding:16px 18px;
+    border-bottom:1px solid var(--line); font-family: var(--display); font-weight:600; font-size:14.5px;
+  }
+  .email-modal-close{
+    background:none; border:none; color: var(--muted); font-size:14px; cursor:pointer; padding:4px;
+    line-height:1; transition: color .15s ease;
+  }
+  .email-modal-close:hover{ color: var(--ink); }
+  .email-modal-options{ padding:10px; display:flex; flex-direction:column; gap:4px; }
+  .email-option{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    padding:11px 12px; border-radius:8px; background:none; border:none; color: var(--ink);
+    font-family: var(--body); font-size:13.5px; font-weight:500; cursor:pointer; text-decoration:none;
+    transition: background .15s ease;
+  }
+  .email-option:hover{ background: rgba(111,160,255,0.08); }
+  .email-option-icon{ display:flex; align-items:center; justify-content:center; width:24px; flex-shrink:0; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -145,8 +181,8 @@
   <div class="nav">
     <span class="who">JAMES HARRIS</span>
     <span class="links">
-      <a href="#work">Work</a>
-      <a href="mailto:jpharris06@gmail.com">Contact</a>
+      <a href="https://www.linkedin.com/in/the-james-harris/" target="_blank" rel="noopener">LinkedIn Profile</a>
+      <a href="#" id="nav-contact">Contact</a>
     </span>
   </div>
 
@@ -228,9 +264,62 @@
 
   <footer>
     <span>© 2026 James Harris</span>
-    <a href="mailto:jpharris06@gmail.com">jpharris06@gmail.com</a>
+    <a href="#" id="footer-contact">jpharris06@gmail.com</a>
   </footer>
 </div>
+
+<!-- ============ EMAIL MODAL ============ -->
+<div class="email-modal-overlay" id="email-modal">
+  <div class="email-modal-card">
+    <div class="email-modal-head">
+      <span>Reach James</span>
+      <button class="email-modal-close" id="email-modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="email-modal-options">
+      <a class="email-option" href="https://mail.google.com/mail/?view=cm&fs=1&to=jpharris06@gmail.com" target="_blank" rel="noopener">
+        <span class="email-option-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#EA4335" d="M12 13.2 2.4 6.6V18a1.8 1.8 0 0 0 1.8 1.8h1.6V9.9l6.2 4.3 6.2-4.3v9.9h1.6A1.8 1.8 0 0 0 21.6 18V6.6L12 13.2Z"/><path fill="#4285F4" d="M19.8 4.8h-.4L12 10.1 4.6 4.8h-.4A1.8 1.8 0 0 0 2.4 6.6l9.6 6.6 9.6-6.6a1.8 1.8 0 0 0-1.8-1.8Z"/></svg>
+        </span>
+        <span>Open in Gmail</span>
+      </a>
+      <a class="email-option" href="https://outlook.office.com/mail/deeplink/compose?to=jpharris06@gmail.com" target="_blank" rel="noopener">
+        <span class="email-option-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18"><rect x="2" y="5" width="13" height="14" rx="1.5" fill="#0A2767"/><path fill="#28A8EA" d="M22 8.2v8.4c0 .6-.5 1-1 .8l-6-3.1V9.9l6-3.1c.5-.2 1 .2 1 .8Z"/><rect x="4" y="8" width="9" height="8" fill="#fff"/></svg>
+        </span>
+        <span>Open in Outlook</span>
+      </a>
+      <button class="email-option" id="copy-email-btn">
+        <span class="email-option-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.6"/></svg>
+        </span>
+        <span id="copy-email-label">Copy email address</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const emailModal = document.getElementById('email-modal');
+  function openEmailModal(e){ e.preventDefault(); emailModal.classList.add('show'); }
+  function closeEmailModal(){ emailModal.classList.remove('show'); }
+
+  document.getElementById('nav-contact').addEventListener('click', openEmailModal);
+  document.getElementById('footer-contact').addEventListener('click', openEmailModal);
+  document.getElementById('email-modal-close').addEventListener('click', closeEmailModal);
+  emailModal.addEventListener('click', (e) => { if(e.target === emailModal) closeEmailModal(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeEmailModal(); });
+
+  document.getElementById('copy-email-btn').addEventListener('click', async () => {
+    const label = document.getElementById('copy-email-label');
+    try{
+      await navigator.clipboard.writeText('jpharris06@gmail.com');
+      label.textContent = 'Copied!';
+      setTimeout(() => { label.textContent = 'Copy email address'; }, 1600);
+    }catch(err){
+      label.textContent = 'jpharris06@gmail.com';
+    }
+  });
+</script>
 
 </body>
 </html>
