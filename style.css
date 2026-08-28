@@ -61,7 +61,7 @@ a{ color:inherit; }
 .intro strong{ color: var(--ink); font-weight:600; }
 
 /* ---------- PAGE HERO (non-homepage pages) ---------- */
-.page-hero{ padding: 46px 0 40px; border-bottom:1px solid var(--line); }
+.page-hero{ padding: 46px 0 40px; }
 .page-hero h1{
   font-family: var(--display); font-weight:700; font-size: clamp(30px,5vw,42px);
   margin:6px 0 0; letter-spacing:-0.01em;
