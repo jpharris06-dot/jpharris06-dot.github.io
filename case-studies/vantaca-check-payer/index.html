@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Check-payer conversion — James Harris</title>
-<meta name="description" content="Case study: segmented digital payment conversion for Vantaca's 1-Click Check Payer Conversion campaign.">
+<meta name="description" content="Case study: a segmented digital payment conversion campaign for an HOA payments platform's automated check-payer conversion program.">
 <meta property="og:title" content="Check-payer conversion — James Harris">
-<meta property="og:description" content="Case study: segmented digital payment conversion for Vantaca's 1-Click Check Payer Conversion campaign.">
+<meta property="og:description" content="Case study: a segmented digital payment conversion campaign for an HOA payments platform's automated check-payer conversion program.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jpharris06-dot.github.io/case-studies/vantaca-check-payer/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Check-payer conversion — James Harris">
-<meta name="twitter:description" content="Case study: segmented digital payment conversion for Vantaca's 1-Click Check Payer Conversion campaign.">
+<meta name="twitter:description" content="Case study: a segmented digital payment conversion campaign for an HOA payments platform's automated check-payer conversion program.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
@@ -23,31 +23,90 @@
 
   <div class="page-hero">
     <a href="/case-studies/" class="crumb">&larr; All Case Studies</a>
-    <span class="eyebrow">Case study &middot; Vantaca</span>
+    <span class="eyebrow">Case study &middot; HOA Payments</span>
     <h1>Check-payer conversion</h1>
   </div>
 
   <div class="section">
-    <div class="tag-row" style="margin-bottom:24px;">
+    <div class="tag-row">
       <span class="status-chip"><i></i>LIVE</span>
       <span class="tag">PAYMENTS</span>
       <span class="tag">CONVERSION</span>
       <span class="tag">FINTECH</span>
     </div>
 
-    <div class="about-body">
-      <p>A segmented approach to moving HOA homeowners off paper checks: guest checkout with progressive autofill for new payers, a magic-link straight to a pre-filled card screen for returning ones, and a post-payment autopay upsell — built for Vantaca's 1-Click Check Payer Conversion workflow.</p>
+    <div class="about-personal">
+      <div class="card-actions">
+        <a class="btn btn-primary" href="https://jpharris06-dot.github.io/vantaca-pay-prototype/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          View live prototype
+        </a>
+        <a class="btn btn-secondary" href="https://github.com/jpharris06-dot/vantaca-pay-prototype" target="_blank" rel="noopener">GitHub repo</a>
+      </div>
     </div>
 
-    <div class="card-actions" style="margin-top:24px;">
-      <a class="btn btn-primary" href="https://jpharris06-dot.github.io/vantaca-pay-prototype/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        View live prototype
-      </a>
-      <a class="btn btn-secondary" href="https://github.com/jpharris06-dot/vantaca-pay-prototype" target="_blank" rel="noopener">GitHub repo</a>
+    <div class="case-block" style="margin-top:34px;">
+      <h3>What it is</h3>
+      <p>An interactive, clickable prototype and stakeholder walkthrough for improving conversion in an HOA payments platform's automated check-payer conversion campaign — an email nudge designed to move homeowners off paper checks and onto digital payment.</p>
     </div>
 
-    <div class="soon-note">Full case study narrative (problem &rarr; approach &rarr; tradeoffs &rarr; outcome) coming soon.</div>
+    <div class="case-block">
+      <h3>The problem</h3>
+      <p>The campaign's beta was converting only 11% of targeted check payers, with the largest leak at the very top of the funnel: 66% of recipients never opened the email at all. Downstream, guest checkout treated every homeowner identically regardless of whether they'd ever paid digitally before — asking people who already had a saved payment method to re-enter it from scratch. With the campaign about to move to General Availability across every managed association, and only 1–2 weeks of engineering time available, the task was to pick one high-leverage intervention and prove it out.</p>
+    </div>
+
+    <div class="case-block">
+      <h3>The solution</h3>
+      <p>A messaging variant built around a paperless/environmental angle rather than generic "convenience" copy — chosen specifically to lift open rate, the stage with the biggest drop-off, and validated by prior experience running payment-adoption campaigns at Entrata. The design went a step further within that same intervention: the email's call-to-action adapts based on a signal the platform already has — whether the homeowner has a saved payment method. Homeowners without one land in a guided guest checkout; homeowners with one get a scoped magic-link straight to a pre-filled payment screen, skipping the friction entirely. A post-payment "set up autopay in one click" prompt was included as a fast, low-cost bonus addressing a separate retention signal (only 68% of first-time digital converters repeated their payment method next cycle) — explicitly scoped as outside the graded intervention.</p>
+    </div>
+
+    <div class="case-block">
+      <h3>Why it matters</h3>
+      <p>This reframes the funnel's biggest lever as the inbox, not the checkout form — a testable, low-engineering-cost hypothesis that directly targets the largest quantified drop-off point in the data, rather than spreading limited engineering time across multiple unproven ideas. The segmented CTA approach also demonstrates that "pick one enhancement" doesn't mean "ignore known user state" — it means building that one enhancement well enough to account for the real population it's serving.</p>
+    </div>
+
+    <div class="case-block">
+      <h3>How it was built</h3>
+      <p>Designed and built as a fully clickable prototype using AI-assisted rapid development (Claude) — phone-frame mockups simulating the actual inbox-to-checkout-to-confirmation flow, with realistic autofill interactions, PCI-accurate payment handling (no stored CVV), and a live progress indicator. Delivered as a single self-contained HTML/CSS/JS file, published via GitHub Pages for stakeholder click-through access, and paired with a scripted 5-minute Loom walkthrough covering the behavioral insight, live demo, testing plan (funnel analysis, A/B testing), and iteration path.</p>
+    </div>
+
+    <div class="case-block">
+      <h3>Skills demonstrated</h3>
+      <p>Data-driven prioritization under tight engineering constraints; behavioral/conversion-psychology-informed product design; payments domain expertise (PCI-DSS, ACH vs. card economics, deep-link auth scoping); rapid AI-assisted prototyping and technical fluency; structuring and communicating a testing/rollout plan (experiment design, success metrics, guardrails); and concise, stakeholder-ready storytelling under a hard time constraint.</p>
+    </div>
+
+    <div class="section-head" style="margin-top:44px; padding-top:28px; border-top:1px solid var(--line);">
+      <span class="eyebrow">KPI Framework</span>
+      <h2>How I'd Measure Success</h2>
+      <p>This concept was never deployed, so there's no live before/after data. Here's the segmented testing framework I'd use to validate it.</p>
+    </div>
+
+    <div class="project-list">
+      <div class="project-card compact">
+        <h3>Email open rate</h3>
+        <p class="desc">Whether the paperless messaging angle actually lifts opens — the single largest drop-off point in the original funnel — tracked overall and by segment.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Click-through rate</h3>
+        <p class="desc">Whether an opened email converts to a click into the flow, tracked by segment (A: no saved payment method, B: saved payment method) to separate a messaging effect from a routing effect.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Payment-setup completion — Segment A</h3>
+        <p class="desc">Completion rate for homeowners without a saved method, moving through guided guest checkout. Nothing about their checkout mechanics changed in this test, so this isolates whether messaging alone moved completion — expected roughly flat.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Payment completion — Segment B</h3>
+        <p class="desc">Completion rate for homeowners with a saved method, routed straight to a pre-filled screen via magic link. This is where the friction-removal effect should show up as a real lift.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Unsubscribe / opt-out rate</h3>
+        <p class="desc">Guardrail metric — a punchier, more urgent-feeling subject line can lift opens while quietly increasing complaints or opt-outs. Tracked to confirm the win isn't coming at the cost of trust.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Post-payment autopay setup rate</h3>
+        <p class="desc">Tracked in the prototype as a bonus signal, but explicitly out of scope for grading this intervention — a separate lever addressing repeat-payment retention, not the check-to-digital conversion this case study is scoped to.</p>
+      </div>
+    </div>
   </div>
 
   <div id="site-footer"></div>
