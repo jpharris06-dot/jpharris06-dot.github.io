@@ -35,19 +35,76 @@
       <span class="tag">ECOMMERCE</span>
     </div>
 
-    <div class="about-body">
-      <p>GearLaunch sellers had exactly one way in: a Google account. This prototype opens three more doors — Google, Facebook, Apple, and email/password — each with a realistic mock authenticator, landing on a replica of the real seller dashboard.</p>
+    <div class="about-personal" style="margin-top:0; padding-top:0; border-top:none;">
+      <h3>What it is</h3>
+      <p>An interactive HTML/CSS/JS prototype redesigning GearLaunch's seller login flow — built from screenshots and a live walkthrough of the existing product, no source code access required.</p>
     </div>
 
-    <div class="card-actions" style="margin-top:24px;">
+    <div class="about-personal">
+      <h3>The problem</h3>
+      <p>GearLaunch sellers had exactly one way into their store dashboard: a Google account. Anyone without a Gmail login hit a hard wall at the front door, before ever seeing the product — a straightforward source of signup drop-off.</p>
+    </div>
+
+    <div class="about-personal">
+      <h3>The solution</h3>
+      <p>A redesigned sign-in screen offering four entry points — Google, Facebook, Apple, and email/password — while preserving GearLaunch's existing visual identity (teal brand color, dark dashboard chrome, product photography motif). Each provider button opens a realistic mock authenticator window modeled on that platform's actual UI, so the flow reads as a true login rather than a placeholder. Successful auth via any method lands the user on a faithful replica of the real GearLaunch dashboard.</p>
+    </div>
+
+    <div class="about-personal">
+      <h3>Why it matters</h3>
+      <p>Every additional identity provider is a common, low-risk lever for reducing signup abandonment — sellers authenticate with whatever account they already trust, instead of being forced to create or remember a new one. The prototype makes that case tangible and clickable rather than theoretical, which is what makes it useful in a stakeholder conversation.</p>
+    </div>
+
+    <div class="about-personal">
+      <h3>How it was built</h3>
+      <p>Built entirely through conversational iteration with Claude: starting from screenshots of the current login and dashboard screens plus plain-English direction, refined over several rounds of hands-on feedback (mock auth windows instead of a bare redirect, matching the real dashboard exactly, fixing a CSS bug that kept the login screen from properly hiding). Delivered as a single self-contained HTML file, shareable via GitHub Pages or opened locally — no build tooling required.</p>
+    </div>
+
+    <div class="about-personal">
+      <h3>Skills demonstrated</h3>
+      <p>Product problem framing, conversion-focused UX thinking, rapid AI-assisted prototyping, and iterative QA/debugging through a live feedback loop.</p>
+    </div>
+
+    <div class="section-head" style="margin-top:40px;">
+      <span class="eyebrow">KPI Framework</span>
+      <h2>How I'd Measure Success</h2>
+      <p>This prototype was never shipped, so there's no before/after data to report. Here's the framework I'd use to validate it if it were.</p>
+    </div>
+
+    <div class="project-list">
+      <div class="project-card compact">
+        <h3>Login success rate</h3>
+        <p class="desc">Successful authentication attempts &divide; total attempts, tracked overall and by provider (Google, Facebook, Apple, email/password) — confirms the new options actually work reliably, not just exist.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Login method mix</h3>
+        <p class="desc">The % split of logins across the four providers once sellers had a choice — directly validates the original hypothesis that sellers without Gmail were being forced through a wall.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Account creation success rate</h3>
+        <p class="desc">% of started signups that complete account creation, before vs. after — the core conversion metric the whole prototype exists to move.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Signup abandonment at the auth wall</h3>
+        <p class="desc">% of visitors who reached the sign-in screen and left without creating an account, before vs. after — the most direct proof of the original problem statement.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Time-to-first-successful-login</h3>
+        <p class="desc">Median time from landing on the sign-in screen to being authenticated — confirms more options don't slow people down with choice overload.</p>
+      </div>
+      <div class="project-card compact">
+        <h3>Password-reset request volume</h3>
+        <p class="desc">Reset request volume isolated to the email/password path — a friction proxy for the one method that isn't a one-click OAuth flow.</p>
+      </div>
+    </div>
+
+    <div class="card-actions" style="margin-top:32px;">
       <a class="btn btn-primary" href="https://jpharris06-dot.github.io/gearlaunch-seller-login-prototype/" target="_blank" rel="noopener">
         <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         View live prototype
       </a>
       <a class="btn btn-secondary" href="https://github.com/jpharris06-dot/gearlaunch-seller-login-prototype" target="_blank" rel="noopener">GitHub repo</a>
     </div>
-
-    <div class="soon-note">Full case study narrative (problem &rarr; approach &rarr; tradeoffs &rarr; outcome) coming soon.</div>
   </div>
 
   <div id="site-footer"></div>
