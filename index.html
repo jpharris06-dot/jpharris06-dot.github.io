@@ -1,111 +1,690 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>James Harris — Product &amp; Payments</title>
-<meta name="description" content="Product and payments leader — case studies, working prototypes, and background.">
-<meta property="og:title" content="James Harris — Product & Payments">
-<meta property="og:description" content="Case studies and working prototypes — not slide decks. Click in, sign in, use them.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://jpharris06-dot.github.io/">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="James Harris — Product & Payments">
-<meta name="twitter:description" content="Case studies and working prototypes — not slide decks. Click in, sign in, use them.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CommunityPay — Segmented Conversion Prototype</title>
+<style>
+  :root{
+    --ink:#132A32;
+    --paper:#F3F5F1;
+    --card:#FFFFFF;
+    --line:#DCE3DB;
+    --muted:#6B7A72;
+    --green:#1E6B45;
+    --green-soft:#E7F2EA;
+    --green-deep:#123D28;
+    --amber:#B4622A;
+    --amber-soft:#FBEEE3;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:var(--sans);
+    background:
+      radial-gradient(circle at 15% 10%, #E9EEE6 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #E4EDE8 0%, transparent 40%),
+      var(--paper);
+    min-height:100vh; color:var(--ink);
+    display:flex; flex-direction:column; align-items:center;
+    padding:32px 16px 64px;
+  }
+
+  .header{ max-width:640px; width:100%; text-align:center; margin-bottom:24px; }
+  .eyebrow{ font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--green); font-weight:700; margin-bottom:8px; }
+  h1{ font-family:var(--serif); font-size:25px; font-weight:400; margin:0 0 8px; letter-spacing:-0.01em; }
+  .sub{ color:var(--muted); font-size:13.5px; max-width:520px; margin:0 auto; line-height:1.5; }
+
+  .stage{ display:flex; gap:36px; align-items:flex-start; max-width:980px; width:100%; justify-content:center; flex-wrap:wrap; }
+
+  .phone-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .phone{
+    width:360px; height:740px; background:#0E1F24; border-radius:44px; padding:12px;
+    box-shadow:0 30px 60px -20px rgba(19,42,50,0.45), 0 0 0 1px rgba(19,42,50,0.06);
+    position:relative;
+  }
+  .notch{
+    position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:120px; height:22px; background:#0E1F24;
+    border-bottom-left-radius:14px; border-bottom-right-radius:14px; z-index:6;
+  }
+  .screen{
+    background:var(--card); width:100%; height:100%; border-radius:32px;
+    overflow:hidden; position:relative; display:flex; flex-direction:column;
+  }
+  .statusbar{
+    height:38px; display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px; font-size:12px; font-weight:600; color:var(--ink); flex-shrink:0;
+  }
+
+  .segchip{
+    position:absolute; top:16px; left:50%; transform:translateX(-50%);
+    background:rgba(19,42,50,0.9); color:#fff; font-size:10.5px; font-weight:700;
+    padding:3px 10px; border-radius:20px; letter-spacing:0.04em; z-index:8;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .segchip.show{ opacity:1; }
+
+  /* ---- title cards ---- */
+  .title-card{
+    display:none; flex:1; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:0 30px; cursor:pointer; background:var(--ink); color:#fff;
+  }
+  .title-card .tag{
+    font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#8FBFA0; margin-bottom:10px; font-weight:700;
+  }
+  .title-card h2{ font-family:var(--serif); font-size:30px; margin:0 0 10px; font-weight:400; }
+  .title-card p{ font-size:13px; color:#B9C9C2; line-height:1.6; max-width:260px; }
+  .title-card .tapme{ margin-top:26px; font-size:11.5px; color:#8FBFA0; font-weight:600; }
+
+  /* ---- inbox / email (shared) ---- */
+  .inbox-header{ padding:6px 18px 12px; display:flex; align-items:center; justify-content:space-between; }
+  .inbox-header h2{ font-family:var(--serif); font-size:21px; margin:0; font-weight:400; }
+  .inbox-header .count{ font-size:12px; color:var(--muted); }
+  .inbox-list{ flex:1; overflow-y:auto; }
+  .inbox-item{ display:flex; gap:12px; padding:12px 18px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .inbox-item.dim{ opacity:0.4; cursor:default; }
+  .inbox-avatar{ width:36px; height:36px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; }
+  .inbox-item .body{ flex:1; min-width:0; }
+  .inbox-row1{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .inbox-from{ font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .inbox-time{ font-size:10.5px; color:var(--muted); flex-shrink:0; }
+  .inbox-subject{ font-size:12.5px; font-weight:600; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .inbox-preview{ font-size:11.5px; color:var(--muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .unread-dot{ width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; margin-top:6px; }
+  .tap-hint{ text-align:center; font-size:11px; color:var(--muted); padding:8px; }
+  .tap-hint b{ color:var(--green); }
+
+  .email-topbar{ display:flex; align-items:center; gap:10px; padding:8px 14px; border-bottom:1px solid var(--line); flex-shrink:0; }
+  .back-btn{ background:none; border:none; font-size:18px; cursor:pointer; color:var(--ink); padding:4px 6px; }
+  .email-topbar .meta{ font-size:11.5px; color:var(--muted); }
+  .email-body{ flex:1; overflow-y:auto; padding:16px 20px 20px; }
+  .email-subject{ font-family:var(--serif); font-size:18px; line-height:1.3; margin:0 0 4px; }
+  .email-preheader{ font-size:11.5px; color:var(--muted); margin-bottom:16px; }
+  .paper-trail{ display:flex; align-items:center; justify-content:center; gap:5px; padding:14px 6px; margin-bottom:16px; background:var(--green-soft); border-radius:14px; }
+  .pt-step{ display:flex; flex-direction:column; align-items:center; gap:3px; opacity:0.55; }
+  .pt-step .ic{ font-size:16px; } .pt-step .lb{ font-size:8.5px; color:var(--muted); font-weight:600; }
+  .pt-strike{ position:relative; } .pt-strike::after{ content:""; position:absolute; left:-3px; right:-3px; top:47%; height:1.5px; background:#B4622A; }
+  .pt-arrow{ color:#B9C4B4; font-size:12px; }
+  .pt-final{ opacity:1; } .pt-final .ic{ color:var(--green); } .pt-final .lb{ color:var(--green-deep); font-weight:700; }
+  .email-copy{ font-size:13.5px; line-height:1.6; color:#1D3A34; margin-bottom:14px; }
+  .email-copy p{ margin:0 0 12px; } .email-copy .lede{ font-weight:600; }
+  .assessment-strip{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:11px 15px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; }
+  .assessment-strip .label{ font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .assessment-strip .amt{ font-family:var(--serif); font-size:17px; }
+  .cta-btn{ display:block; width:100%; text-align:center; background:var(--green); color:#fff; text-decoration:none; border-radius:12px; padding:14px; font-weight:700; font-size:14px; margin-bottom:8px; cursor:pointer; border:none; font-family:var(--sans); }
+  .cta-sub{ text-align:center; font-size:11px; color:var(--muted); margin-bottom:6px; }
+  .email-footer{ border-top:1px solid var(--line); padding-top:12px; font-size:9.5px; color:#9AA69E; line-height:1.6; margin-top:8px; }
+
+  /* ---- app chrome (guest / signed-in) ---- */
+  .app-topbar{ display:flex; align-items:center; justify-content:space-between; padding:10px 18px 8px; flex-shrink:0; }
+  .app-brand{ display:flex; align-items:center; gap:7px; }
+  .app-brand .dot{ width:20px; height:20px; border-radius:6px; background:var(--green); }
+  .app-brand .name{ font-size:13px; font-weight:700; letter-spacing:-0.01em; }
+  .app-badge{ font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; }
+  .app-badge.guest{ background:var(--amber-soft); color:var(--amber); }
+  .app-badge.known{ background:var(--green-soft); color:var(--green); }
+
+  .app-content{ flex:1; overflow-y:auto; padding:2px 18px 8px; }
+  .section-title{ font-size:11.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:14px 0 8px; font-weight:700; }
+  .section-title:first-child{ margin-top:4px; }
+
+  .field{ margin-bottom:9px; }
+  .field label{ display:block; font-size:10.5px; color:var(--muted); margin-bottom:3px; font-weight:600; }
+  .field input{
+    width:100%; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px;
+    font-size:13px; font-family:var(--sans); color:var(--ink); background:var(--card);
+    cursor:pointer;
+  }
+  .field input.filled{ border-color:#B9CCC0; background:#FAFCFA; }
+  .field input:focus{ outline:none; border-color:var(--green); }
+  .field-hint{ font-size:10px; color:var(--green); margin-top:3px; display:none; }
+  .field-hint.show{ display:block; }
+
+  .pay-methods{ display:flex; gap:8px; margin-top:14px; margin-bottom:6px; }
+  .pay-btn{
+    flex:1; border:1.5px solid var(--line); background:var(--card); border-radius:12px;
+    padding:12px 8px; text-align:center; cursor:pointer; font-family:var(--sans);
+  }
+  .pay-btn .ic{ font-size:18px; margin-bottom:4px; }
+  .pay-btn .lb{ font-size:11.5px; font-weight:700; }
+  .pay-btn.primary{ border-color:var(--ink); box-shadow:0 0 0 1px var(--ink); }
+  .pay-btn.secondary{ opacity:0.55; }
+
+  .bottom-nav{
+    display:flex; justify-content:space-around; align-items:flex-start;
+    padding:8px 6px 12px; border-top:1px solid var(--line); flex-shrink:0; background:var(--card);
+  }
+  .nav-item{ display:flex; flex-direction:column; align-items:center; gap:3px; color:#9AA69E; }
+  .nav-item svg{ width:20px; height:20px; }
+  .nav-item span{ font-size:9px; font-weight:600; }
+  .nav-item.active{ color:var(--green); }
+
+  /* ---- card payment screen ---- */
+  .cardface{
+    background:linear-gradient(135deg,#16323B,#0E1F24);
+    border-radius:16px; padding:18px; color:#fff; margin-bottom:16px;
+    position:relative; overflow:hidden;
+  }
+  .cardface .chip{ width:32px; height:24px; border-radius:5px; background:linear-gradient(135deg,#D8C48A,#B89B5E); margin-bottom:16px; }
+  .cardface .num{ font-family:var(--serif); font-size:16px; letter-spacing:2px; margin-bottom:14px; min-height:20px; }
+  .cardface .row2{ display:flex; justify-content:space-between; font-size:9.5px; color:#9FC2B0; text-transform:uppercase; letter-spacing:0.04em; }
+  .cardface .row2 div div{ color:#fff; font-size:12px; margin-top:3px; font-family:var(--sans); letter-spacing:0.5px; }
+
+  .cc-fields{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .cc-fields .full{ grid-column:1 / -1; }
+
+  .pay-total-btn{
+    width:100%; background:var(--green); color:#fff; border:none; border-radius:12px;
+    padding:14px; font-size:14.5px; font-weight:700; cursor:pointer; font-family:var(--sans); margin-top:14px;
+  }
+
+  /* ---- modal / overlay (autopay + congrats) ---- */
+  .sheet-backdrop{
+    position:absolute; inset:0; background:rgba(14,31,36,0.55);
+    display:flex; align-items:flex-end; opacity:0; pointer-events:none;
+    transition:opacity .25s ease; z-index:20;
+  }
+  .sheet-backdrop.show{ opacity:1; pointer-events:auto; }
+  .sheet{
+    background:var(--card); width:100%; border-radius:24px 24px 0 0; padding:22px 20px 22px;
+    transform:translateY(100%); transition:transform .32s cubic-bezier(.2,.9,.25,1);
+  }
+  .sheet-backdrop.show .sheet{ transform:translateY(0); }
+  .sheet-handle{ width:36px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 14px; }
+  .sheet-eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--green); margin-bottom:5px; }
+  .sheet-title{ font-family:var(--serif); font-size:19px; margin:0 0 14px; line-height:1.25; }
+
+  .select-row{ margin-bottom:11px; }
+  .select-row label{ display:block; font-size:10.5px; color:var(--muted); margin-bottom:4px; font-weight:600; }
+  .select-row select{
+    width:100%; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px;
+    font-size:13px; font-family:var(--sans); color:var(--ink); background:var(--card);
+  }
+
+  .sheet-actions{ display:flex; gap:8px; margin-top:16px; }
+  .sheet-actions button{
+    flex:1; border-radius:12px; padding:13px; font-size:13.5px; font-weight:700;
+    cursor:pointer; font-family:var(--sans); border:none;
+  }
+  .btn-save{ background:var(--green); color:#fff; }
+  .btn-cancel{ background:var(--paper); color:var(--muted); border:1px solid var(--line) !important; }
+
+  /* ---- congrats ---- */
+  .confirm-wrap{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    height:100%; text-align:center; padding:0 26px; cursor:pointer;
+  }
+  .confirm-badge{ width:58px; height:58px; border-radius:50%; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:16px; }
+  .confirm-wrap h3{ font-family:var(--serif); font-size:20px; margin:0 0 8px; }
+  .confirm-wrap p{ font-size:12.5px; color:var(--muted); line-height:1.55; margin:0 0 18px; max-width:260px; }
+  .confirm-wrap .tapnext{ font-size:11px; color:var(--green); font-weight:700; }
+
+  .restart{
+    display:block; width:100%; text-align:center; margin-top:4px;
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:10px; font-size:12px; color:var(--ink); cursor:pointer;
+    font-family:var(--sans); font-weight:600;
+  }
+
+  /* ---- side panel ---- */
+  .panel{ width:220px; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px 20px 18px; align-self:flex-start; }
+  .panel h3{ font-family:var(--serif); font-size:14.5px; margin:0 0 12px; color:var(--muted); font-weight:400; }
+  .progress-track{ display:flex; flex-direction:column; gap:6px; }
+  .progress-seg{ height:5px; border-radius:2px; background:var(--line); }
+  .progress-seg.done{ background:var(--green); }
+
+  @media (max-width:760px){ .stage{ flex-direction:column; align-items:center; } .panel{ width:280px; } .progress-track{ flex-direction:row; } .progress-seg{ height:4px; } }
+</style>
 </head>
 <body>
 
-<div class="wrap">
-  <div id="site-nav"></div>
-
-  <div class="hero">
-    <div class="name-row">
-      <h1>James Harris</h1>
-      <img src="/profile.jpg" alt="James Harris" class="profile-pic" id="profile-photo">
-    </div>
-    <p class="role">Product &amp; Payments Leader</p>
-    <div class="meta-row">
-      <span>LEHI, UT</span>
-      <span><b>PLATFORM · PAYMENTS · PROPTECH · ECOMMERCE</b></span>
-    </div>
-    <p class="intro">
-      10+ years leading platform, payments, and marketplace products — most recently running payments and product at GearLaunch, and before that building and leading Entrata&apos;s ResidentPay product for eight years.
-    </p>
+  <div class="header">
+    <div class="eyebrow">CommunityPay · Option A, Segmented</div>
+    <h1>Two Emails, Two Checkout Paths</h1>
+    <p class="sub">Same paperless message. Different backend logic depending on whether Kevin has a saved payment method. Tap through — the whole demo runs on clicks.</p>
   </div>
 
-  <div class="section" id="about">
-    <div class="section-head">
-      <span class="eyebrow">About</span>
-      <h2>A bit about me</h2>
-    </div>
-    <div class="teaser-card">
-      <p>I'm a product leader who loves turning complicated problems into products that feel simple — across fintech, proptech, e-commerce, and AI, leading products processing billions of dollars and used by millions of people.</p>
-      <a class="link-arrow" href="/about-me/">
-        Read the full story
-        <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-  </div>
+  <div class="stage">
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="segchip" id="segchip">Segment A</div>
+        <div class="screen" id="screen">
 
-  <div class="section" id="work">
-    <div class="section-head">
-      <span class="eyebrow">Selected work</span>
-      <h2>Case Studies</h2>
-      <p>Working prototypes with the story behind them — the source is one repo away.</p>
-    </div>
+          <!-- 0: SEGMENT A TITLE -->
+          <div class="title-card" id="s_titleA" style="display:flex;" onclick="go('emailA')">
+            <div class="tag">Segment A</div>
+            <h2>No saved payment method</h2>
+            <p>Check payer, never completed digital checkout. Gets the full guest flow.</p>
+            <div class="tapme">tap to continue →</div>
+          </div>
 
-    <div class="project-list">
+          <!-- 1: EMAIL A (inbox) -->
+          <div id="s_emailA" style="display:none; height:100%; flex-direction:column;">
+            <div class="statusbar"><span>9:41</span><span>●●●●  📶  🔋</span></div>
+            <div class="inbox-header"><h2>Inbox</h2><span class="count">1 new</span></div>
+            <div class="inbox-list">
+              <div class="inbox-item" onclick="go('emailA_open')">
+                <div class="inbox-avatar" style="background:var(--green);">R</div>
+                <div class="body">
+                  <div class="inbox-row1"><span class="inbox-from">Riverbend HOA</span><span class="inbox-time">9:14 AM</span></div>
+                  <div class="inbox-subject">Riverbend went paperless. Your check didn't get the memo.</div>
+                  <div class="inbox-preview">Pay online, zero paper, zero stamps — see how your neighbors pay now →</div>
+                </div>
+                <div class="unread-dot"></div>
+              </div>
+              <div class="inbox-item dim">
+                <div class="inbox-avatar" style="background:#9AA69E;">C</div>
+                <div class="body"><div class="inbox-row1"><span class="inbox-from">CommunityPay</span><span class="inbox-time">Tue</span></div>
+                <div class="inbox-subject">Your monthly community update</div>
+                <div class="inbox-preview">Pool hours, board minutes, and events</div></div>
+              </div>
+            </div>
+            <div class="tap-hint">Tap the <b>unread email</b> to open it</div>
+          </div>
 
-      <div class="project-card compact">
-        <div class="card-top">
-          <h3>Multi-provider sign-in</h3>
-          <span class="status-chip"><i></i>LIVE</span>
+          <!-- 2: EMAIL A open -->
+          <div id="s_emailA_open" style="display:none; height:100%; flex-direction:column;">
+            <div class="email-topbar"><button class="back-btn" onclick="go('emailA')">←</button><span class="meta">Riverbend HOA · to me</span></div>
+            <div class="email-body">
+              <h1 class="email-subject">Riverbend went paperless. Your check didn't get the memo.</h1>
+              <div class="email-preheader">Pay online, zero paper, zero stamps — see how your neighbors pay now.</div>
+              <div class="paper-trail">
+                <div class="pt-step"><div class="ic pt-strike">📝</div><div class="lb">Write it</div></div>
+                <span class="pt-arrow">→</span>
+                <div class="pt-step"><div class="ic pt-strike">✉️</div><div class="lb">Seal it</div></div>
+                <span class="pt-arrow">→</span>
+                <div class="pt-step"><div class="ic pt-strike">🚗</div><div class="lb">Mail it</div></div>
+                <span class="pt-arrow">→</span>
+                <div class="pt-step pt-final"><div class="ic">✓</div><div class="lb">or online</div></div>
+              </div>
+              <div class="email-copy">
+                <p class="lede">Every check makes a trip.</p>
+                <p>From your checkbook to an envelope to a stamp to a mailbox to our processing center — paper, at every step, for a payment that could take ten seconds.</p>
+              </div>
+              <div class="assessment-strip"><span class="label">Assessment due Aug 26</span><span class="amt">$350.00</span></div>
+              <button class="cta-btn" onclick="go('guestDetails')">Go paperless — pay online</button>
+              <div class="cta-sub">Free · no portal login required · takes under a minute</div>
+              <div class="email-footer">Riverbend HOA is managed on CommunityPay. 671 Lincoln Boulevard, Winnetka, IL 60093 · Unsubscribe from payment reminders</div>
+            </div>
+          </div>
+
+          <!-- 3: GUEST DETAILS (Segment A) -->
+          <div id="s_guestDetails" style="display:none; height:100%; flex-direction:column;">
+            <div class="app-topbar">
+              <div class="app-brand"><div class="dot"></div><div class="name">Riverbend HOA</div></div>
+              <div class="app-badge guest">Guest</div>
+            </div>
+            <div class="app-content">
+              <div class="section-title">Your info</div>
+              <div class="field">
+                <label>First name</label>
+                <input type="text" id="f_first" placeholder="Tap to fill" readonly onclick="fillPerson()">
+              </div>
+              <div class="field"><label>Last name</label><input type="text" id="f_last" readonly></div>
+              <div class="field"><label>Email address <span style="color:var(--green); font-weight:600;">· from your email</span></label><input type="text" id="f_email" value="iMadeMyFamilyDisappear@homealone.com" readonly></div>
+              <div class="field"><label>Phone number</label><input type="text" id="f_phone" readonly></div>
+              <div class="field-hint" id="hint_person">✓ Pulled from your account record</div>
+
+              <div class="section-title">Property</div>
+              <div class="field">
+                <label>Management ID</label>
+                <input type="text" id="f_mgmt" placeholder="Tap to fill" readonly onclick="fillProperty()">
+              </div>
+              <div class="field"><label>Address</label><input type="text" id="f_addr" readonly></div>
+              <div class="field"><label>City / State</label><input type="text" id="f_city" readonly></div>
+              <div class="field"><label>ZIP</label><input type="text" id="f_zip" readonly></div>
+              <div class="field-hint" id="hint_prop">✓ Matched to your assessment record</div>
+
+              <div class="section-title">Assessment</div>
+              <div class="assessment-strip"><span class="label">Due Aug 26</span><span class="amt">$350.00</span></div>
+
+              <div class="pay-methods">
+                <div class="pay-btn primary" onclick="startCard('entry','A')">
+                  <div class="ic">💳</div><div class="lb">Pay by Card</div>
+                </div>
+                <div class="pay-btn secondary">
+                  <div class="ic">🏦</div><div class="lb">Pay by Bank</div>
+                </div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span>Home</span></div>
+              <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span>Payments</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg><span>Requests</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M8 2v4"/><path d="M16 2v4"/></svg><span>Calendar</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span>More</span></div>
+            </div>
+          </div>
+
+          <!-- CARD PAYMENT (shared for both segments) -->
+          <div id="s_card" style="display:none; height:100%; flex-direction:column;">
+            <div class="app-topbar">
+              <div class="app-brand"><div class="dot"></div><div class="name">Riverbend HOA</div></div>
+              <div class="app-badge" id="cardBadge">Guest</div>
+            </div>
+            <div class="app-content">
+              <div class="section-title" style="margin-top:6px;">Pay assessment</div>
+              <div class="assessment-strip" style="margin-bottom:14px;"><span class="label">Due Aug 26</span><span class="amt">$350.00</span></div>
+
+              <div class="cardface">
+                <div class="chip"></div>
+                <div class="num" id="cardNumDisplay">•••• •••• •••• ••••</div>
+                <div class="row2">
+                  <div>Cardholder<div id="cardNameDisplay">—</div></div>
+                  <div>Expires<div id="cardExpDisplay">—</div></div>
+                </div>
+              </div>
+
+              <div class="cc-fields">
+                <div class="field full">
+                  <label>Card number</label>
+                  <input type="text" id="cc_num" placeholder="Tap to fill" readonly onclick="fillCard()">
+                </div>
+                <div class="field"><label>Expiration</label><input type="text" id="cc_exp" readonly></div>
+                <div class="field"><label>CVV</label><input type="text" id="cc_cvv" placeholder="Tap to fill" readonly onclick="fillCvv()"></div>
+                <div class="field full"><label>Billing ZIP</label><input type="text" id="cc_zip" readonly></div>
+              </div>
+
+              <button class="pay-total-btn" onclick="submitPay()">Pay $350.00</button>
+            </div>
+          </div>
+
+          <!-- CONGRATS (shared) -->
+          <div id="s_congrats" style="display:none; height:100%;">
+            <div class="confirm-wrap" id="congratsWrap" onclick="afterCongrats()">
+              <div class="confirm-badge">✓</div>
+              <h3>Congratulations!</h3>
+              <p>Your auto-payment will now run every 1st of the month. We'll send you a friendly reminder ahead of your next auto-payment.</p>
+              <div class="tapnext" id="congratsNext">tap to continue →</div>
+            </div>
+          </div>
+
+          <!-- 6: SEGMENT B TITLE -->
+          <div class="title-card" id="s_titleB" onclick="go('emailB')">
+            <div class="tag">Segment B</div>
+            <h2>Has a saved payment method</h2>
+            <p>Check payer who already completed digital checkout once before. Skips guest checkout entirely.</p>
+            <div class="tapme">tap to continue →</div>
+          </div>
+
+          <!-- 7: EMAIL B (inbox) -->
+          <div id="s_emailB" style="display:none; height:100%; flex-direction:column;">
+            <div class="statusbar"><span>9:41</span><span>●●●●  📶  🔋</span></div>
+            <div class="inbox-header"><h2>Inbox</h2><span class="count">1 new</span></div>
+            <div class="inbox-list">
+              <div class="inbox-item" onclick="go('emailB_open')">
+                <div class="inbox-avatar" style="background:var(--green);">R</div>
+                <div class="body">
+                  <div class="inbox-row1"><span class="inbox-from">Riverbend HOA</span><span class="inbox-time">9:14 AM</span></div>
+                  <div class="inbox-subject">Riverbend went paperless. Your check didn't get the memo.</div>
+                  <div class="inbox-preview">One tap, zero paper, zero stamps — see how your neighbors pay now →</div>
+                </div>
+                <div class="unread-dot"></div>
+              </div>
+              <div class="inbox-item dim">
+                <div class="inbox-avatar" style="background:#9AA69E;">C</div>
+                <div class="body"><div class="inbox-row1"><span class="inbox-from">CommunityPay</span><span class="inbox-time">Tue</span></div>
+                <div class="inbox-subject">Your monthly community update</div>
+                <div class="inbox-preview">Pool hours, board minutes, and events</div></div>
+              </div>
+            </div>
+            <div class="tap-hint">Same email, different homeowner — tap to open</div>
+          </div>
+
+          <!-- 8: EMAIL B open -->
+          <div id="s_emailB_open" style="display:none; height:100%; flex-direction:column;">
+            <div class="email-topbar"><button class="back-btn" onclick="go('emailB')">←</button><span class="meta">Riverbend HOA · to me</span></div>
+            <div class="email-body">
+              <h1 class="email-subject">Riverbend went paperless. Your check didn't get the memo.</h1>
+              <div class="email-preheader">One tap, zero paper, zero stamps — see how your neighbors pay now.</div>
+              <div class="paper-trail">
+                <div class="pt-step"><div class="ic pt-strike">📝</div><div class="lb">Write it</div></div>
+                <span class="pt-arrow">→</span>
+                <div class="pt-step"><div class="ic pt-strike">✉️</div><div class="lb">Seal it</div></div>
+                <span class="pt-arrow">→</span>
+                <div class="pt-step"><div class="ic pt-strike">🚗</div><div class="lb">Mail it</div></div>
+                <span class="pt-arrow">→</span>
+                <div class="pt-step pt-final"><div class="ic">✓</div><div class="lb">or one tap</div></div>
+              </div>
+              <div class="email-copy">
+                <p class="lede">Every check makes a trip.</p>
+                <p>From your checkbook to an envelope to a stamp to a mailbox to our processing center — paper, at every step, for a payment that could take ten seconds.</p>
+              </div>
+              <div class="assessment-strip"><span class="label">Assessment due Aug 26</span><span class="amt">$350.00</span></div>
+              <button class="cta-btn" onclick="startCard('prefilled','B')">Go paperless — pay in one tap</button>
+              <div class="cta-sub">Same link, different destination — this one knows you</div>
+              <div class="email-footer">Riverbend HOA is managed on CommunityPay. 671 Lincoln Boulevard, Winnetka, IL 60093 · Unsubscribe from payment reminders</div>
+            </div>
+          </div>
+
+          <!-- AUTOPAY MODAL (overlays whichever app screen is behind it, contained within the phone frame) -->
+          <div class="sheet-backdrop" id="autopayModal">
+            <div class="sheet">
+              <div class="sheet-handle"></div>
+              <div class="sheet-eyebrow">One more thing</div>
+              <div class="sheet-title">Save this for future auto-pay?</div>
+
+              <div class="select-row">
+                <label>Payment method</label>
+                <select id="ap_method">
+                  <option selected>Visa •••• 4242</option>
+                  <option>Wells Fargo Checking •••• 5678</option>
+                </select>
+              </div>
+              <div class="select-row">
+                <label>Day of the month</label>
+                <select id="ap_day">
+                  <option selected>1st</option>
+                  <option>2nd</option>
+                  <option>3rd</option>
+                </select>
+              </div>
+              <div class="select-row">
+                <label>Amount</label>
+                <select id="ap_amount"><option selected>Full assessment each cycle — $350.00</option></select>
+              </div>
+
+              <div class="sheet-actions">
+                <button class="btn-cancel" onclick="skipAutopay()">Cancel</button>
+                <button class="btn-save" onclick="saveAutopay()">Save Auto-Payment</button>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <p class="desc">GearLaunch sellers had exactly one way in: a Google account. This case study opens three more doors — Google, Facebook, Apple, and email/password.</p>
-        <div class="tag-row">
-          <span class="tag">AUTH</span>
-          <span class="tag">CONVERSION</span>
-          <span class="tag">ECOMMERCE</span>
-        </div>
-        <a class="link-arrow" href="/case-studies/gearlaunch-auth/">
-          Read case study
-          <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
       </div>
 
-      <div class="project-card compact">
-        <div class="card-top">
-          <h3>Check-payer conversion</h3>
-          <span class="status-chip"><i></i>LIVE</span>
-        </div>
-        <p class="desc">A segmented approach to moving HOA homeowners off paper checks: guest checkout, a magic-link straight to a pre-filled card screen for returning payers, and a post-payment autopay upsell.</p>
-        <div class="tag-row">
-          <span class="tag">PAYMENTS</span>
-          <span class="tag">CONVERSION</span>
-          <span class="tag">FINTECH</span>
-        </div>
-        <a class="link-arrow" href="/case-studies/vantaca-check-payer/">
-          Read case study
-          <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
+      <button class="restart" onclick="restart()">↺ Restart prototype</button>
     </div>
 
-    <div style="margin-top:18px;">
-      <a class="link-arrow" href="/case-studies/">
-        View all case studies
-        <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+    <div class="panel">
+      <h3>Progress</h3>
+      <div class="progress-track" id="progressTrack"></div>
     </div>
   </div>
 
-  <div id="site-footer"></div>
-</div>
+<script>
+  const order = ['titleA','emailA','emailA_open','guestDetails','card_A','congrats_A','titleB','emailB','emailB_open','card_B','congrats_B'];
 
-<script src="/site.js"></script>
+  function setPanel(key){
+    const idx = order.indexOf(key);
+    const track = document.getElementById('progressTrack');
+    track.innerHTML = '';
+    order.forEach((k,i)=>{
+      const seg = document.createElement('div');
+      seg.className = 'progress-seg' + (i<=idx ? ' done' : '');
+      track.appendChild(seg);
+    });
+  }
+
+  const allScreens = ['s_titleA','s_emailA','s_emailA_open','s_guestDetails','s_card','s_congrats','s_titleB','s_emailB','s_emailB_open'];
+
+  function hideAll(){
+    allScreens.forEach(id=>{
+      const el = document.getElementById(id);
+      el.style.display = 'none';
+    });
+  }
+
+  function go(screenKey, panelKey){
+    hideAll();
+    const map = {
+      emailA: 's_emailA', emailA_open: 's_emailA_open', guestDetails: 's_guestDetails',
+      emailB: 's_emailB', emailB_open: 's_emailB_open', titleA: 's_titleA', titleB: 's_titleB'
+    };
+    const domId = map[screenKey];
+    const el = document.getElementById(domId);
+    el.style.display = (domId === 's_titleA' || domId === 's_titleB') ? 'flex' : 'flex';
+    setPanel(panelKey || screenKey);
+
+    const chip = document.getElementById('segchip');
+    if(['emailA','emailA_open','guestDetails'].includes(screenKey)){
+      chip.textContent = 'Segment A'; chip.classList.add('show');
+    } else if(['emailB','emailB_open'].includes(screenKey)){
+      chip.textContent = 'Segment B'; chip.classList.add('show');
+    } else {
+      chip.classList.remove('show');
+    }
+  }
+
+  // ---- guest details autofill ----
+  function fillPerson(){
+    document.getElementById('f_first').value = 'Kevin';
+    document.getElementById('f_last').value = 'McCallister';
+    document.getElementById('f_phone').value = '1-800-759-3000';
+    ['f_first','f_last','f_phone'].forEach(id=>document.getElementById(id).classList.add('filled'));
+    document.getElementById('hint_person').classList.add('show');
+  }
+  function fillProperty(){
+    document.getElementById('f_mgmt').value = 'MGMT-671-WNTK';
+    document.getElementById('f_addr').value = '671 Lincoln Boulevard';
+    document.getElementById('f_city').value = 'Winnetka, Illinois';
+    document.getElementById('f_zip').value = '60093';
+    ['f_mgmt','f_addr','f_city','f_zip'].forEach(id=>document.getElementById(id).classList.add('filled'));
+    document.getElementById('hint_prop').classList.add('show');
+  }
+
+  // ---- card screen ----
+  let currentSegment = 'A';
+  let cardMode = 'entry';
+
+  function startCard(mode, segment){
+    currentSegment = segment;
+    cardMode = mode;
+    hideAll();
+    const card = document.getElementById('s_card');
+    card.style.display = 'flex';
+
+    const badge = document.getElementById('cardBadge');
+    // reset fields
+    document.getElementById('cc_num').value = '';
+    document.getElementById('cc_num').classList.remove('filled');
+    document.getElementById('cc_exp').value = '';
+    document.getElementById('cc_cvv').value = '';
+    document.getElementById('cc_cvv').classList.remove('filled');
+    document.getElementById('cc_zip').value = '';
+    document.getElementById('cardNumDisplay').textContent = '•••• •••• •••• ••••';
+    document.getElementById('cardNameDisplay').textContent = '—';
+    document.getElementById('cardExpDisplay').textContent = '—';
+
+    if(mode === 'entry'){
+      badge.textContent = 'Guest'; badge.className = 'app-badge guest';
+      document.getElementById('cc_num').readOnly = true;
+      document.getElementById('cc_num').placeholder = 'Tap to fill';
+      document.getElementById('cc_exp').value = '';
+      document.getElementById('cc_zip').value = '60093';
+      document.getElementById('cardNameDisplay').textContent = 'KEVIN MCCALLISTER';
+      setPanel('card_A');
+    } else {
+      badge.textContent = 'Hi, Kevin'; badge.className = 'app-badge known';
+      document.getElementById('cc_num').value = '4242 4242 4242 4242';
+      document.getElementById('cc_num').classList.add('filled');
+      document.getElementById('cc_num').readOnly = true;
+      document.getElementById('cc_exp').value = '04/2042';
+      document.getElementById('cc_zip').value = '60093';
+      document.getElementById('cardNumDisplay').textContent = '•••• •••• •••• 4242';
+      document.getElementById('cardNameDisplay').textContent = 'KEVIN MCCALLISTER';
+      document.getElementById('cardExpDisplay').textContent = '04/2042';
+      setPanel('card_B');
+    }
+    document.getElementById('segchip').classList.remove('show');
+  }
+
+  function fillCard(){
+    if(cardMode !== 'entry') return;
+    document.getElementById('cc_num').value = '4242 4242 4242 4242';
+    document.getElementById('cc_num').classList.add('filled');
+    document.getElementById('cc_exp').value = '04/2042';
+    document.getElementById('cc_cvv').value = '424';
+    document.getElementById('cc_cvv').classList.add('filled');
+    document.getElementById('cardNumDisplay').textContent = '•••• •••• •••• 4242';
+    document.getElementById('cardExpDisplay').textContent = '04/2042';
+  }
+
+  function fillCvv(){
+    document.getElementById('cc_cvv').value = '424';
+    document.getElementById('cc_cvv').classList.add('filled');
+  }
+
+  function submitPay(){
+    document.getElementById('autopayModal').classList.add('show');
+  }
+
+  function skipAutopay(){
+    document.getElementById('autopayModal').classList.remove('show');
+    showCongrats(true);
+  }
+  function saveAutopay(){
+    document.getElementById('autopayModal').classList.remove('show');
+    showCongrats(false);
+  }
+
+  function showCongrats(skipped){
+    hideAll();
+    const c = document.getElementById('s_congrats');
+    c.style.display = 'flex';
+    const wrap = document.getElementById('congratsWrap');
+    if(skipped){
+      wrap.querySelector('h3').textContent = 'Payment complete';
+      wrap.querySelector('p').textContent = 'Your one-time payment of $350.00 was successful. No auto-pay was set up.';
+    } else {
+      wrap.querySelector('h3').textContent = 'Congratulations!';
+      wrap.querySelector('p').textContent = "Your auto-payment will now run every 1st of the month. We'll send you a friendly reminder ahead of your next auto-payment.";
+    }
+    document.getElementById('congratsNext').textContent = currentSegment === 'A' ? 'tap to continue to Segment B →' : 'tap to restart →';
+    setPanel(currentSegment === 'A' ? 'congrats_A' : 'congrats_B');
+  }
+
+  function afterCongrats(){
+    if(currentSegment === 'A'){
+      hideAll();
+      document.getElementById('s_titleB').style.display = 'flex';
+      setPanel('titleB');
+    } else {
+      restart();
+    }
+  }
+
+  function restart(){
+    hideAll();
+    document.getElementById('autopayModal').classList.remove('show');
+    document.getElementById('s_titleA').style.display = 'flex';
+    // reset guest fields
+    ['f_first','f_last','f_phone','f_mgmt','f_addr','f_city','f_zip'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.value=''; el.classList.remove('filled');
+    });
+    document.getElementById('hint_person').classList.remove('show');
+    document.getElementById('hint_prop').classList.remove('show');
+    setPanel('titleA');
+    document.getElementById('segchip').classList.remove('show');
+  }
+
+  // init
+  setPanel('titleA');
+</script>
 </body>
 </html>
