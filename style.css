@@ -226,6 +226,12 @@ footer a:hover{ color: var(--signal); }
 }
 .about-personal p{ color:#B7C0CA; font-size:14.5px; line-height:1.75; margin:0 0 14px; max-width:600px; }
 .about-personal p:last-child{ margin-bottom:0; }
+.case-block{ margin-top:30px; }
+.case-block h3{
+  font-family: var(--display); font-weight:600; font-size:13px; letter-spacing:0.1em; text-transform:uppercase;
+  color: var(--muted); margin:0 0 14px;
+}
+.case-block p{ color:#B7C0CA; font-size:14.5px; line-height:1.75; margin:0; max-width:640px; }
 .pull-quote{
   margin: 32px 0 0; padding: 22px 26px; border-left:2px solid var(--signal);
   background: var(--panel); border-radius: 0 var(--radius) var(--radius) 0;
