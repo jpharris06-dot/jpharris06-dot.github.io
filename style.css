@@ -40,7 +40,7 @@ a{ color:inherit; }
 .nav .links a.active{ color: var(--ink); }
 
 /* ---------- HERO (homepage only) ---------- */
-.hero{ padding: 54px 0 46px; border-bottom:1px solid var(--line); }
+.hero{ padding: 54px 0 28px; border-bottom:1px solid var(--line); }
 .hero h1{
   font-family: var(--display); font-weight:700; font-size: clamp(38px,6vw,58px);
   margin:0 0 6px; letter-spacing:-0.015em; line-height:1.04;
@@ -77,6 +77,7 @@ a{ color:inherit; }
 
 /* ---------- SECTION HEADER ---------- */
 .section{ padding: 52px 0; }
+.section + .section{ padding-top: 0; }
 .section-head{ margin-bottom:30px; }
 .eyebrow{
   font-family: var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
