@@ -44,6 +44,19 @@
             </span>
             <span id="copy-email-label">Copy email address</span>
           </button>
+          <div style="height:1px; background:var(--line); margin:6px 4px;"></div>
+          <a class="email-option" href="tel:+18456168136">
+            <span class="email-option-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </span>
+            <span>Call 845-616-8136</span>
+          </a>
+          <button class="email-option" id="copy-phone-btn">
+            <span class="email-option-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <span id="copy-phone-label">Copy phone number</span>
+          </button>
         </div>
       </div>
     </div>`;
@@ -82,6 +95,17 @@
         setTimeout(() => { label.textContent = 'Copy email address'; }, 1600);
       } catch (err) {
         label.textContent = 'jpharris06@gmail.com';
+      }
+    });
+
+    document.getElementById('copy-phone-btn').addEventListener('click', async () => {
+      const label = document.getElementById('copy-phone-label');
+      try {
+        await navigator.clipboard.writeText('845-616-8136');
+        label.textContent = 'Copied!';
+        setTimeout(() => { label.textContent = 'Copy phone number'; }, 1600);
+      } catch (err) {
+        label.textContent = '845-616-8136';
       }
     });
   }
